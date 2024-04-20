@@ -34,13 +34,10 @@ export async function handler(event: SQSEvent) {
   console.log(
     `Processing message ${messageIds.length} IDs: ${messageIds.join(", ")}`
   )
-  const response = await fetch("https://api.resend.com/emails/batch", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-    },
-    body: JSON.stringify(
+
+  try {
+    console.log("Building request body ...")
+    const body = JSON.stringify(
       event.Records.map((record) => {
         console.log(
           `Unparsed message body of ${record.messageId}:`,
@@ -80,22 +77,50 @@ export async function handler(event: SQSEvent) {
           }
         }
       })
-    ),
-  })
+    )
+    console.log("Request body built.")
 
-  if (response.ok) {
-    const body = await response.json()
-
-    return {
-      statusCode: 200,
+    console.log("Making request ...")
+    const response = await fetch("https://api.resend.com/emails/batch", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      },
       body,
+    })
+    console.log("Request made.")
+
+    if (response.ok) {
+      console.log("Response is OK.")
+      const body = await response.json()
+
+      return {
+        statusCode: 200,
+        body,
+      }
+    } else {
+      console.log("Response is not OK:", response.status)
+      const body = await response.json()
+      console.log("JSON response body", body)
+
+      return {
+        statusCode: response.status,
+        body,
+      }
     }
-  } else {
-    const body = await response.json()
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log("Function failed with error:", e.message)
 
-    return {
-      statusCode: response.status,
-      body,
+      return {
+        statusCode: 500,
+        body: e.message,
+      }
+    } else {
+      return {
+        statusCode: 500,
+      }
     }
   }
 }
