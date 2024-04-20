@@ -31,7 +31,9 @@ type MessageBodyJSON = {
 export async function handler(event: SQSEvent) {
   const messageIds = event.Records.map((record) => record.messageId)
 
-  console.log(`Processing message IDs: ${messageIds.join(", ")}`)
+  console.log(
+    `Processing message ${messageIds.length} IDs: ${messageIds.join(", ")}`
+  )
   const response = await fetch("https://api.resend.com/emails/batch", {
     method: "POST",
     headers: {
@@ -40,6 +42,11 @@ export async function handler(event: SQSEvent) {
     },
     body: JSON.stringify(
       event.Records.map((record) => {
+        console.log(
+          `Unparsed message body of ${record.messageId}:`,
+          record.body
+        )
+
         const { to, subject, componentProps } = JSON.parse(
           record.body
         ) as MessageBodyJSON
