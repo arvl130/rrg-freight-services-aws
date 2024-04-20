@@ -29,6 +29,7 @@ export class RrgFreightServicesAwsStack extends cdk.Stack {
         MAIL_FROM_URL: process.env.MAIL_FROM_URL,
       },
       timeout: cdk.Duration.minutes(5),
+      memorySize: 1024,
     })
 
     const eventSource = new lambdaEventSources.SqsEventSource(queue, {
