@@ -16,6 +16,7 @@ type PackageStatusUpdateEmailComponentProps = {
 type OtpEmailComponentProps = {
   type: "otp"
   otp: string
+  validityMessage?: string
 }
 
 type ComponentProps =
@@ -71,9 +72,15 @@ export async function handler(event: SQSEvent) {
             from: `RRG Freight Services Updates <${process.env.MAIL_FROM_URL}>`,
             to,
             subject,
-            html: render(<OtpEmail otp={componentProps.otp} />, {
-              pretty: true,
-            }),
+            html: render(
+              <OtpEmail
+                otp={componentProps.otp}
+                validityMessage={componentProps.validityMessage}
+              />,
+              {
+                pretty: true,
+              }
+            ),
           }
         }
       })

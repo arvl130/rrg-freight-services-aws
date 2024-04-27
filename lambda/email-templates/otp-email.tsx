@@ -10,7 +10,7 @@ import {
   Section,
 } from "@react-email/components"
 
-export function OtpEmail(props: { otp: string }) {
+export function OtpEmail(props: { otp: string; validityMessage?: string }) {
   return (
     <Html>
       <Tailwind>
@@ -33,7 +33,7 @@ export function OtpEmail(props: { otp: string }) {
             </Section>
             <Text className="text-sm font-medium text-gray-700">
               You must give this code to the courier that will deliver it to
-              you.
+              you. {props.validityMessage && <>{props.validityMessage}</>}
             </Text>
             <Text className="text-slate-400 text-sm mt-8">
               If this email is not intended to you, please ignore and delete it.
