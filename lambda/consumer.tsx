@@ -3,6 +3,7 @@ import type { SQSEvent } from "aws-lambda"
 import { render } from "@react-email/render"
 import PackageStatusUpdateEmail from "./email-templates/package-status-update-email"
 import OtpEmail from "./email-templates/otp-email"
+import OutForDeliveryMonitoringLinkEmail from "./email-templates/out-for-delivery-monitoring-link-email"
 
 type PackageStatusUpdateEmailComponentProps = {
   type: "package-status-update"
@@ -19,9 +20,17 @@ type OtpEmailComponentProps = {
   validityMessage?: string
 }
 
+type OutForDeliveryMonitoringLinkEmailComponentProps = {
+  type: "out-for-delivery-monitoring-link"
+  receiverFullName: string
+  packageId: string
+  accessKey: string
+}
+
 type ComponentProps =
   | PackageStatusUpdateEmailComponentProps
   | OtpEmailComponentProps
+  | OutForDeliveryMonitoringLinkEmailComponentProps
 
 type MessageBodyJSON = {
   to: string
@@ -61,6 +70,22 @@ export async function handler(event: SQSEvent) {
                   label: componentProps.callToAction.label,
                   href: componentProps.callToAction.href,
                 }}
+              />,
+              {
+                pretty: true,
+              }
+            ),
+          }
+        } else if (componentProps.type === "out-for-delivery-monitoring-link") {
+          return {
+            from: `RRG Freight Services Updates <${process.env.MAIL_FROM_URL}>`,
+            to,
+            subject,
+            html: render(
+              <OutForDeliveryMonitoringLinkEmail
+                receiverFullName={componentProps.receiverFullName}
+                packageId={componentProps.packageId}
+                accessKey={componentProps.accessKey}
               />,
               {
                 pretty: true,
