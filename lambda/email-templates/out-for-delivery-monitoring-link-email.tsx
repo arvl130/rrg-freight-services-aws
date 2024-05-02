@@ -15,6 +15,8 @@ export function OutForDeliveryMonitoringLinkEmail(props: {
   receiverFullName: string
   packageId: string
   accessKey: string
+  driverFullName: string
+  driverContactNumber: string
 }) {
   return (
     <Html>
@@ -34,9 +36,14 @@ export function OutForDeliveryMonitoringLinkEmail(props: {
                 {props.packageId} is now Out for Delivery.
               </Text>
               <Text className="text-sm font-medium text-gray-700">
-                You can monitor the location history of your package as it gets
-                shipped by RRG Freight Services through our Location History
-                page.
+                Driver: {props.driverFullName}
+              </Text>
+              <Text className="text-sm font-medium text-gray-700">
+                Contact number: {props.driverContactNumber}
+              </Text>
+              <Text className="text-sm font-medium text-gray-700">
+                You can monitor the location of your package as it gets shipped
+                by RRG Freight Services through our Location History page.
               </Text>
               <Text className="text-sm font-medium text-gray-700">
                 To see the page, simply click the button below.

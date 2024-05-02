@@ -23,6 +23,8 @@ type OtpEmailComponentProps = {
 type OutForDeliveryMonitoringLinkEmailComponentProps = {
   type: "out-for-delivery-monitoring-link"
   receiverFullName: string
+  driverFullName: string
+  driverContactNumber: string
   packageId: string
   accessKey: string
 }
@@ -84,6 +86,8 @@ export async function handler(event: SQSEvent) {
             html: render(
               <OutForDeliveryMonitoringLinkEmail
                 receiverFullName={componentProps.receiverFullName}
+                driverFullName={componentProps.driverFullName}
+                driverContactNumber={componentProps.driverContactNumber}
                 packageId={componentProps.packageId}
                 accessKey={componentProps.accessKey}
               />,
