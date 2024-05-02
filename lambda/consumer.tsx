@@ -16,6 +16,7 @@ type PackageStatusUpdateEmailComponentProps = {
 
 type OtpEmailComponentProps = {
   type: "otp"
+  id: string
   otp: string
   validityMessage?: string
 }
@@ -103,6 +104,7 @@ export async function handler(event: SQSEvent) {
             subject,
             html: render(
               <OtpEmail
+                id={componentProps.id}
                 otp={componentProps.otp}
                 validityMessage={componentProps.validityMessage}
               />,

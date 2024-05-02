@@ -10,7 +10,11 @@ import {
   Section,
 } from "@react-email/components"
 
-export function OtpEmail(props: { otp: string; validityMessage?: string }) {
+export function OtpEmail(props: {
+  id: string
+  otp: string
+  validityMessage?: string
+}) {
   return (
     <Html>
       <Tailwind>
@@ -24,12 +28,11 @@ export function OtpEmail(props: { otp: string; validityMessage?: string }) {
             />
             <Heading className="mt-0">Delivery Verification</Heading>
             <Text className="text-sm font-medium text-gray-700">
-              Thank you for trusting RRG Freight Services! Please use this
-              unique code to verify that the package is being received by its
-              rightful receiver.
+              Please use this unique code to verify that the Package {props.id}{" "}
+              is being received by its rightful receiver.
             </Text>
             <Section className="[background-color:_#78CFDC] rounded-lg my-8 py-2 font-bold text-white w-[200px] mx-auto">
-              <Text className="text-2xl">{props.otp}</Text> {/* OTP NUMBER */}
+              <Text className="text-2xl">{props.otp}</Text>
             </Section>
             <Text className="text-sm font-medium text-gray-700">
               You must give this code to the courier that will deliver it to
